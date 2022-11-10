@@ -65,15 +65,15 @@ function animateBall() {
   checkBallCords(ballY, h)
 
   if (dirX === "plus") {
-    ballX += 2
+    ballX += 4
   } else {
-    ballX -= 2
+    ballX -= 4
   }
 
   if (dirY === "plus") {
-    ballY += 2
+    ballY += 4
   } else {
-    ballY -= 2
+    ballY -= 4
   }
 
   drawBall()
