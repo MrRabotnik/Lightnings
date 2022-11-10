@@ -42,7 +42,7 @@ function clearCanvas() {
 }
 
 function drawBall() {
-  ctx.shadowBlur = 30
+  ctx.shadowBlur = 50
   ctx.beginPath();
   ctx.arc(ballX, ballY, 50, 0, Math.PI * 2);
   ctx.fill();
