@@ -23,7 +23,8 @@ ctx.shadowColor = "white"
 ctx.lineCap = "round"
 ctx.lineJoin = "round"
 
-const lightnings = []
+let lightnings = []
+let id = 0
 
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -60,54 +61,61 @@ function checkBallCords(ballCord, size) {
 
 function animateBall() {
   clearCanvas()
+  drawLightnings()
 
   checkBallCords(ballX, w)
   checkBallCords(ballY, h)
 
   if (dirX === "plus") {
-    ballX += 4
+    ballX += 2
   } else {
-    ballX -= 4
+    ballX -= 2
   }
 
   if (dirY === "plus") {
-    ballY += 4
+    ballY += 2
   } else {
-    ballY -= 4
+    ballY -= 2
   }
 
   drawBall()
 }
 
+function drawLightnings() {
+  lightnings?.map(lightning => {
+    lightning?.array?.map((cord, index) => {
+      if (index < lightning?.array.length - 1) {
+        ctx.beginPath()
+        ctx.moveTo(cord[0], cord[1])
+        ctx.lineTo(lightning?.array[index + 1][0], lightning?.array[index + 1][1])
+        ctx.stroke()
+        ctx.closePath()
+      }
+    })
+  })
+}
+
 function animateLightnings() {
   ctx.strokeStyle = randomColor()
-  // ctx.strokeStyle = "yellow"
   ctx.shadowBlur = 1
   ctx.lineWidth = randomNumber(10, 20)
 
   lightningX = randomNumber(10, w - 10)
   lightningY = randomNumber(10, h - 10)
 
-  while(Math.abs(lightningX - ballX) < 200 || Math.abs(lightningY - ballY) < 200){
+  while (Math.abs(lightningX - ballX) < 200 || Math.abs(lightningY - ballY) < 200) {
     lightningX = randomNumber(10, w - 10)
     lightningY = randomNumber(10, h - 10)
   }
 
   const arr = [[lightningX, lightningY]]
 
-  function drawLightnings() {
-    arr.map((cord, index) => {
-      if(index < arr.length - 1){
-        ctx.beginPath()
-        ctx.moveTo(cord[0], cord[1])
-        ctx.lineTo(arr[index + 1][0], arr[index + 1][1])
-        ctx.stroke()
-        ctx.closePath()
-      }
-    })
-  }
+  lightnings.push({
+    "id": id,
+    "array": arr
+  })
 
-  drawLightnings()
+  const lightningId = id++
 
   function animateLightning() {
     ctx.beginPath()
@@ -125,7 +133,7 @@ function animateLightnings() {
 
     const maxX = Math.abs(Math.floor((ballX - arrX) / 4))
     const maxY = Math.abs(Math.floor((ballY - arrY) / 4))
-    
+
     if (ballX > arrX) {
       nextPointX = arrX + randomNumber(minX, maxX)
     } else {
@@ -143,15 +151,26 @@ function animateLightnings() {
     ctx.stroke()
     ctx.closePath()
 
-    if (Math.abs(ballX - arrX) < 50 || Math.abs(ballY - arrY) < 50) {
+    lightnings = lightnings.map(lightning => {
+      if (lightning?.id === lightningId) {
+        return {
+          "array": arr,
+          ...lightning
+        }
+      }
+      return lightning
+    })
+
+    if (Math.abs(ballX - arrX) < 30 || Math.abs(ballY - arrY) < 30) {
       clearInterval(interval)
+      lightnings = lightnings.filter(lightning => lightning?.id !== lightningId)
     }
   }
 
-  const interval = setInterval(animateLightning, 20)
+  const interval = setInterval(animateLightning, 30)
 }
 
-setInterval(animateBall, 50)
-setInterval(animateLightnings, 50)
+setInterval(animateBall, 10)
+setInterval(animateLightnings, 100)
 // animateBall()
 // animateLightnings()
