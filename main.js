@@ -91,7 +91,6 @@ function animateLightnings() {
   while(Math.abs(lightningX - ballX) < 200 || Math.abs(lightningY - ballY) < 200){
     lightningX = randomNumber(10, w - 10)
     lightningY = randomNumber(10, h - 10)
-    console.log("message")
   }
 
   const arr = [[lightningX, lightningY]]
@@ -140,7 +139,6 @@ function animateLightnings() {
     }
 
     arr.push([nextPointX, nextPointY])
-    console.log(arr)
     ctx.lineTo(nextPointX, nextPointY)
     ctx.stroke()
     ctx.closePath()
