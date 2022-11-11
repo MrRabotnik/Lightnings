@@ -99,7 +99,7 @@ function drawLightnings() {
 
 function animateLightnings() {
     ctx.strokeStyle = randomColor()
-    ctx.shadowBlur = 1
+    ctx.shadowBlur = 0
     ctx.lineWidth = randomNumber(10, 20)
 
     lightningX = randomNumber(10, w - 10)
